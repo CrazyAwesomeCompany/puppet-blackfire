@@ -10,15 +10,12 @@ class blackfire::repo::debian {
         require => Package['curl'],
     }
 
-
     file { 'blackfire.repo':
         path    => '/etc/apt/sources.list.d/blackfire.list',
         ensure  => present,
         content => 'deb http://packages.blackfire.io/debian any main',
         require => Exec['import-key'],
-    }
-
-    exec { 'apt-get-update':
+    } -> exec { 'apt-get-update':
         command => 'apt-get update',
         path    => ['/bin', '/usr/bin'],
         require => File['blackfire.repo'],
